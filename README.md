@@ -1,4 +1,6 @@
-The project's datasets are too big to be placed in the GitHub repository.
+The purpose of this project is to create a sentiment analysis model.
+
+The datasets this project is based on are too big to be placed in the GitHub repository.
 
 To get the train and test dataset for this project. Go to this link https://www.kaggle.com/datasets/kritanjalijain/amazon-reviews/data
 
