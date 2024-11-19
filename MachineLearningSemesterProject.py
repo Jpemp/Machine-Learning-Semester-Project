@@ -35,15 +35,14 @@ def polarity_bar(train_reviews, test_reviews):
 #Train a model for sentiment analysis
 #Preprocessing data
 def tokenization(data):
-    token = re.findall("[\w']+", data)
+    token = re.findall("[\w']+", data) #this removes punctuation from data so no need for punctuation removal in data_cleaning function
     print(token)
     return token
 
 def data_cleaning(data):
     print(data)
     no_digits = "".join([i for i in data if not i.isdigit()]) #removes digits from data
-    no_punctuation = "".join([i for i in no_digits if i not in string.punctuation]) #removes punctuation from data
-    clean = no_punctuation.lower() #turns any uppercase letters into lowercase
+    clean = no_digits.lower() #turns any uppercase letters into lowercase
     return clean
 
 def sentiment_training(data_frame):
