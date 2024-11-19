@@ -1,6 +1,9 @@
 #This project involves a classification of review data on a scale of 1 to 2, with 1 being negative and 2 being positive
 
+from tkinter.messagebox import NO
 from sklearn.feature_extraction.text import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+import string
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -33,20 +36,25 @@ def polarity_bar(train_reviews, test_reviews):
     plt.close()
 
 #Train a model for sentiment analysis
-#Preprocessing data
+
+#Tokenizing data
 def tokenization(data):
-    token = re.findall("[\w']+", data) #this removes punctuation from data so no need for punctuation removal in data_cleaning function
-    print(token)
+    token = re.findall("[\w']+", data)
     return token
 
+#Preprocessing data
 def data_cleaning(data):
-    print(data)
-    no_digits = "".join([i for i in data if not i.isdigit()]) #removes digits from data
+    no_punctuation = "".join([i for i in data if i not in string.punctuation]) #removes punctuation from data
+    no_digits = "".join([i for i in no_punctuation if not i.isdigit()]) #removes digits from data
     clean = no_digits.lower() #turns any uppercase letters into lowercase
     return clean
 
-def sentiment_training(data_frame):
+#Term Frequency-Inverse Document Frequency
+def TF_IDF(data):
     print(1)
+
+def sentiment_training(data_frame):
+    print(2)
 
 def model_accuracy():
     print(2)
@@ -54,12 +62,21 @@ def model_accuracy():
 def sentiment_testing():
     print(3)
 
-#May need to tokenize before cleaning text
-#print(train_reviews.head())
-#train_reviews['Processed Text'] = train_reviews['Title'] + " " + train_reviews['Message']
-#train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(data_cleaning)
+#Preprocessing and tokenization of train and test data
+#print(train_reviews)
+train_reviews = train_reviews.replace(np.nan, '').astype(str) #gets rid of issues in reading the data
+train_reviews['Processed Text'] = train_reviews['Title'] + " " + train_reviews['Message']
+#print(train_reviews)
+train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(tokenization)
+#print(train_reviews)
+train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(data_cleaning)
 #print(train_reviews)
 
+#print(test_reviews)
+test_reviews = test_reviews.replace(np.nan, '').astype(str)  #gets rid of issues in reading the data
 test_reviews['Processed Text'] = test_reviews['Title'] + " " + test_reviews['Message']
+#print(test_reviews)
+test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(data_cleaning)
+#print(test_reviews)
 test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(tokenization)
-#test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(data_cleaning)
+#print(test_reviews)
