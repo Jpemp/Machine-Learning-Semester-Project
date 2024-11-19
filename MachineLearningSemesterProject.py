@@ -11,8 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Loading test and train dataset into pandas dataframes
-train_reviews = pd.read_csv('train.csv', delimiter=',', names=['Polarity', 'Title', 'Message'])
-test_reviews = pd.read_csv('test.csv', delimiter=',', names=['Polarity', 'Title', 'Message'])
+train_reviews = pd.read_csv('train.csv', delimiter=',', nrows=800000, names=['Polarity', 'Title', 'Message']) #Train data is way too big for the code to execute quickly, reducing size to x
+test_reviews = pd.read_csv('test.csv', delimiter=',', nrows=200000, names=['Polarity', 'Title', 'Message']) #Test data reduced to account for train data reduction
 
 #If you wish to look at the pandas dataframes for the train and test datasets, un-comment the two statements below
 #print(train_reviews)
@@ -48,14 +48,12 @@ def tokenization(data):
 def data_cleaning(data):
     no_punctuation = "".join([i for i in data if i not in string.punctuation]) #removes punctuation from data
     no_digits = "".join([i for i in no_punctuation if not i.isdigit()]) #removes digits from data
-    stop_words = stopwords.words('english')
-    no_stopwords = "".join([i for i in no_digits if i not in stop_words]) #removes stopwords which can get in the way of the TF-IDF since they don't provide much sentiment
-    clean = no_stopwords.lower() #turns any uppercase letters into lowercase
+    clean = no_digits.lower() #turns any uppercase letters into lowercase
     return clean
 
 #Term Frequency-Inverse Document Frequency
 def TF_IDF(data):
-    tfidf = TfidfVectorizer()
+    tfidf = TfidfVectorizer(lowercase=False)
     tfidf_data = tfidf.fit_transform(data)
     return tfidf_data
 
@@ -78,14 +76,14 @@ train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(data_cle
 train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(tokenization)
 print(train_reviews)
 
-#print(test_reviews)
+print(test_reviews)
 test_reviews = test_reviews.replace(np.nan, '').astype(str)  #gets rid of issues in reading the data
 test_reviews['Processed Text'] = test_reviews['Title'] + " " + test_reviews['Message']
 #print(test_reviews)
 test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(data_cleaning)
 #print(test_reviews)
 test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(tokenization)
-#print(test_reviews)
+print(test_reviews)
 
 #Splitting data frames into x,y values for LS graphs
 X_train = TF_IDF(train_reviews['Processed Text'])
