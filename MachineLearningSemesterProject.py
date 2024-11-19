@@ -1,12 +1,12 @@
 #This project involves a classification of review data on a scale of 1 to 2, with 1 being negative and 2 being positive
 
-import string
+from sklearn.feature_extraction.text import re
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 #Loading test and train dataset into pandas dataframes
-train_reviews = pd.read_csv('train.csv', delimiter=',', names=["Polarity", "Title", "Message"], quotechar = '"')
+train_reviews = pd.read_csv('train.csv', delimiter=',', names=["Polarity", "Title", "Message"])
 test_reviews = pd.read_csv('test.csv', names=["Polarity", "Title", "Message"])
 
 #If you wish to look at the pandas dataframes for the train and test datasets, un-comment the two statements below
@@ -34,6 +34,11 @@ def polarity_bar(train_reviews, test_reviews):
 
 #Train a model for sentiment analysis
 #Preprocessing data
+def tokenization(data):
+    token = re.findall("[\w']+", data)
+    print(token)
+    return token
+
 def data_cleaning(data):
     print(data)
     no_digits = "".join([i for i in data if not i.isdigit()]) #removes digits from data
@@ -49,11 +54,13 @@ def model_accuracy():
 
 def sentiment_testing():
     print(3)
-    
+
+#May need to tokenize before cleaning text
 #print(train_reviews.head())
 #train_reviews['Processed Text'] = train_reviews['Title'] + " " + train_reviews['Message']
 #train_reviews['Processed Text'] = train_reviews['Processed Text'].apply(data_cleaning)
 #print(train_reviews)
 
 test_reviews['Processed Text'] = test_reviews['Title'] + " " + test_reviews['Message']
-test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(data_cleaning)
+test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(tokenization)
+#test_reviews['Processed Text'] = test_reviews['Processed Text'].apply(data_cleaning)
