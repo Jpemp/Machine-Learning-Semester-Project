@@ -61,6 +61,8 @@ def TF_IDF(data):
 def sentiment_training(X_train, Y_train):
     model = LogisticRegression()
     model.fit(X_train, Y_train)
+    #training_test = model.score(X_train, Y_train)  #<- to see if what i did was right
+    #print("Training test: ", training_test)
     return model
 
 #evaluate the model
