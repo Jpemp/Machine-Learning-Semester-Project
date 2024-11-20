@@ -57,9 +57,13 @@ def TF_IDF(data):
     tfidf_data = tfidf.fit_transform(data)
     return tfidf_data
 
-def sentiment_training(data_frame):
-    print(2)
+#sentiment training
+def sentiment_training(X_train, Y_train):
+    model = LogisticRegression()
+    model.fit(X_train, Y_train)
+    return model
 
+#evaluate the model
 def model_accuracy():
     print(2)
 
