@@ -5,6 +5,7 @@ from tkinter.messagebox import NO
 from sklearn.linear_model import LogisticRegression
 from sklearn import model_selection
 from sklearn import datasets
+from sklearn.feature_extraction.image import grid_to_graph
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import log_loss, accuracy_score
 from nltk.corpus import stopwords
@@ -13,7 +14,7 @@ import string
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.sparse import csc_matrix
+
 
 nltk.download('stopwords') #downloading stopword dictionary to prevent stopwords not found error
 stop_words = set(stopwords.words('english')) #setting stopword dictionary for stopword removal later
@@ -131,7 +132,11 @@ accuracy = model_accuracy(Y_test, y_pred) #compares test polarity vs predicted p
 print(accuracy) #Accuracy
 print(cross_entropy(Y_test, y_pred)) #Cost(loss)
 
-plt.scatter(x=X_test, y=Y_train)
-plt.title("Logistic Regression of Sentiment Analysis")
-plt.xlabel("")
-plt.ylabel("Sentiment")
+print(X_test.shape)
+print(Y_test.shape)
+
+
+#plt.title("Logistic Regression of Sentiment Analysis\nAccuracy: {accuracy}")
+#plt.xlabel("TF_IDF Score")
+#plt.ylabel("Sentiment")
+#plt.show()
