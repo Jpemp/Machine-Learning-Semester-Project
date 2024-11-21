@@ -142,6 +142,7 @@ print(Y_test.shape)
 #plt.ylabel("Sentiment")
 #plt.show()
 
+y_pred_int = [int(x) for x in y_pred]
 print(type(Y_test.iloc[0]))
 print(type(y_pred[0]))
 
@@ -149,7 +150,7 @@ plt.scatter(Y_test, y_pred)
 plt.title('Logistic Regression of Sentiment Analysis')
 plt.xlabel('Actual Sentiment')
 plt.ylabel('Predicted Sentiment')
-sns.regplot(x=Y_test, y=y_pred)
+sns.regplot(x=Y_test.astype(int), y=y_pred_int, logistic=True)
 plt.show()
 plt.close()
 
