@@ -14,6 +14,7 @@ import string
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 nltk.download('stopwords') #downloading stopword dictionary to prevent stopwords not found error
@@ -121,7 +122,7 @@ def test_model(x_test, weight, bias):
 X = pd.concat([test_reviews['Processed Text'], train_reviews['Processed Text']]) #combining data for TFIDF and logistic regression function
 Y = pd.concat([test_reviews['Polarity'], train_reviews['Polarity']])
 X_TFIDF = TF_IDF(X)
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X_TFIDF, Y, test_size = 0.2, shuffle=False) #splits data
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X_TFIDF, Y, test_size = 0.2, shuffle=False) #splits data. KEEP test size percentage same as train.csv and test.csv row percentage
 model = LogisticRegression()
 model.fit(X_train, Y_train) #creates a logistic regression model based on X_train and Y_train
 
@@ -140,3 +141,26 @@ print(Y_test.shape)
 #plt.xlabel("TF_IDF Score")
 #plt.ylabel("Sentiment")
 #plt.show()
+
+print(type(Y_test.iloc[0]))
+print(type(y_pred[0]))
+
+plt.scatter(Y_test, y_pred)
+plt.title('Logistic Regression of Sentiment Analysis')
+plt.xlabel('Actual Sentiment')
+plt.ylabel('Predicted Sentiment')
+sns.regplot(x=Y_test, y=y_pred)
+plt.show()
+plt.close()
+
+
+# Plot predicted vs actual targets
+plt.figure(figsize=(10, 6))
+#sns.regplot(x=X_train, y=Y_train, data=train_reviews, logistic=True)
+plt.scatter(range(len(Y_test)), Y_test, color='blue', label='Actual Target', alpha=0.6)
+plt.scatter(range(len(y_pred)), y_pred, color='red', label='Predicted Target', alpha=0.6, marker='x')
+plt.title('Actual vs Predicted Target Classes')
+plt.xlabel('Sample Index')
+plt.ylabel('Target Class (0 or 1)')
+plt.legend()
+plt.show()
