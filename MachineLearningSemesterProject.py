@@ -7,7 +7,7 @@ from sklearn import model_selection
 from sklearn import datasets
 from sklearn.feature_extraction.image import grid_to_graph
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import log_loss, accuracy_score
+from sklearn.metrics import log_loss, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score
 from nltk.corpus import stopwords
 import nltk
 import string
@@ -26,7 +26,7 @@ test_reviews = pd.read_csv('test.csv', delimiter=',', nrows=2000, names=['Polari
 
 #Display Polarity Occurrences on a Bar Graph
 def polarity_graphs(train_reviews, test_reviews):
-    train = train_reviews.Polarity.value_counts()
+    train = train_reviews.value_counts()
     print(f"Number of Polarity Occurrences:\n{train}")
     train.plot.bar()
     plt.xlabel("Polarity")
@@ -35,8 +35,12 @@ def polarity_graphs(train_reviews, test_reviews):
     plt.show()
     plt.close()
 
+    plt.pie(train, labels=train.index, autopct='%1.1f%%')
+    plt.title("Distribution of Sentiment of Train Dataset")
+    plt.show()
+    plt.close()
 
-    test = test_reviews.Polarity.value_counts()
+    test = test_reviews.value_counts()
     print(f"Number of Polarity Occurrences:\n{test}")
     test.plot.bar()
     plt.xlabel("Polarity")
@@ -45,11 +49,10 @@ def polarity_graphs(train_reviews, test_reviews):
     plt.show()
     plt.close()
 
-    train.plot.pie()
+    plt.pie(test, labels=test.index, autopct='%1.1f%%')
     plt.title("Distribution of Sentiment of Train Dataset")
-
-    test.plot.pie()
-    plt.title("Distribution of Sentiment of Test Dataset")
+    plt.show()
+    plt.close()
 
 #Data Preparation 
 
@@ -98,8 +101,6 @@ def pred(X, weight, bias):
 def model_accuracy(y_true, y_pred):
     accurate_pred = 0
     total = len(y_true)
-    print(len(y_true))
-    print(len(y_pred))
     for i in range(len(y_true)):
         if y_true.iloc[i] == y_pred[i]:
             accurate_pred = accurate_pred + 1
@@ -123,18 +124,41 @@ X = pd.concat([test_reviews['Processed Text'], train_reviews['Processed Text']])
 Y = pd.concat([test_reviews['Polarity'], train_reviews['Polarity']])
 X_TFIDF = TF_IDF(X)
 X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X_TFIDF, Y, test_size = 0.2, shuffle=False) #splits data. KEEP test size percentage same as train.csv and test.csv row percentage
+
+print(f"X_train size: {X_train.shape}")
+print(f"Y_train size: {Y_train.shape}")
+
+print(f"X_test size: {X_test.shape}")
+print(f"Y_test size: {Y_test.shape}")
+
+polarity_graphs(Y_train, Y_test)
+
 model = LogisticRegression()
 model.fit(X_train, Y_train) #creates a logistic regression model based on X_train and Y_train
 
+
 weight = model.coef_
+print(f"Weight: {weight}")
 bias = model.intercept_
+print(f"Bias: {bias}")
 y_pred = test_model(X_test, weight, bias)
 accuracy = model_accuracy(Y_test, y_pred) #compares test polarity vs predicted polarity and tells how accurate it is
-print(accuracy) #Accuracy
-print(cross_entropy(Y_test, y_pred)) #Cost(loss)
+print(f"Accuracy: {accuracy}") #Accuracy
+ce = cross_entropy(Y_test, y_pred) #Cost(loss)
+print(f"Loss: {ce}")
+precision = precision_score(Y_test, y_pred, average='weighted')
+print(f"Precision: {precision}")
+recall = recall_score(Y_test, y_pred, average='weighted')
+print(f"Recall: recall")
+f1 = f1_score(Y_test, y_pred, average='weighted')
+print(f"F1 Score: {f1}")
 
-print(X_test.shape)
-print(Y_test.shape)
+#confusion matrix which shows false predictions and true predictions
+cmatrix = confusion_matrix(Y_test, y_pred)
+display = ConfusionMatrixDisplay(cmatrix).plot()
+plt.show()
+plt.close()
+
 
 
 #plt.title("Logistic Regression of Sentiment Analysis\nAccuracy: {accuracy}")
@@ -150,7 +174,7 @@ plt.scatter(Y_test, y_pred)
 plt.title('Logistic Regression of Sentiment Analysis')
 plt.xlabel('Actual Sentiment')
 plt.ylabel('Predicted Sentiment')
-sns.regplot(x=Y_test.astype(int), y=y_pred_int, logistic=True)
+sns.regplot(x=test_reviews['Processed Text'], y=Y_test, logistic=True)
 plt.show()
 plt.close()
 
