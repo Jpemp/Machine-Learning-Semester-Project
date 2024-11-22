@@ -1,4 +1,4 @@
-The purpose of this project is to create a sentiment analysis model.
+The purpose of this project is to create a sentiment analysis model from Amazon reviews. The sentiment has a polarity of 0-1, with 0 being a negative sentiment and 1 being a positive sentiment. 
 
 The datasets this project is based on are too big to be placed in the GitHub repository.
 
