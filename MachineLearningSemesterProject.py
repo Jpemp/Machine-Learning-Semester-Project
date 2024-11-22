@@ -7,7 +7,7 @@ from sklearn import model_selection
 from sklearn import datasets
 from sklearn.feature_extraction.image import grid_to_graph
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import log_loss, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score
+from sklearn.metrics import log_loss, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score, RocCurveDisplay, PrecisionRecallDisplay
 from nltk.corpus import stopwords
 import nltk
 import string
@@ -149,7 +149,7 @@ print(f"Loss: {ce}")
 precision = precision_score(Y_test, y_pred, average='weighted')
 print(f"Precision: {precision}")
 recall = recall_score(Y_test, y_pred, average='weighted')
-print(f"Recall: recall")
+print(f"Recall: {recall}")
 f1 = f1_score(Y_test, y_pred, average='weighted')
 print(f"F1 Score: {f1}")
 
@@ -159,33 +159,13 @@ display = ConfusionMatrixDisplay(cmatrix).plot()
 plt.show()
 plt.close()
 
-
-
-#plt.title("Logistic Regression of Sentiment Analysis\nAccuracy: {accuracy}")
-#plt.xlabel("TF_IDF Score")
-#plt.ylabel("Sentiment")
-#plt.show()
-
-y_pred_int = [int(x) for x in y_pred]
-print(type(Y_test.iloc[0]))
-print(type(y_pred[0]))
-
-plt.scatter(Y_test, y_pred)
-plt.title('Logistic Regression of Sentiment Analysis')
-plt.xlabel('Actual Sentiment')
-plt.ylabel('Predicted Sentiment')
-sns.regplot(x=test_reviews['Processed Text'], y=Y_test, logistic=True)
+#ROC curve which shows how well a model operates given certain false positive rates 
+RocCurveDisplay.from_estimator(model, X_test, Y_test)
 plt.show()
 plt.close()
 
-
-# Plot predicted vs actual targets
-plt.figure(figsize=(10, 6))
-#sns.regplot(x=X_train, y=Y_train, data=train_reviews, logistic=True)
-plt.scatter(range(len(Y_test)), Y_test, color='blue', label='Actual Target', alpha=0.6)
-plt.scatter(range(len(y_pred)), y_pred, color='red', label='Predicted Target', alpha=0.6, marker='x')
-plt.title('Actual vs Predicted Target Classes')
-plt.xlabel('Sample Index')
-plt.ylabel('Target Class (0 or 1)')
-plt.legend()
+#Precision-recall relationship of the model
+PrecisionRecallDisplay.from_estimator(model, X_test, Y_test)
 plt.show()
+plt.close()
+
