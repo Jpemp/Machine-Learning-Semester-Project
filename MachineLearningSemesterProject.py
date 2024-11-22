@@ -2,7 +2,7 @@
 
 from functools import total_ordering
 from tkinter.messagebox import NO
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn import model_selection
 from sklearn import datasets
 from sklearn.feature_extraction.image import grid_to_graph
@@ -53,8 +53,6 @@ def polarity_graphs(train_reviews, test_reviews):
     plt.title("Distribution of Sentiment of Train Dataset")
     plt.show()
     plt.close()
-
-#Data Preparation 
 
 #Preprocessing data
 def preprocessing(data):
@@ -131,11 +129,10 @@ print(f"Y_train size: {Y_train.shape}")
 print(f"X_test size: {X_test.shape}")
 print(f"Y_test size: {Y_test.shape}")
 
-polarity_graphs(Y_train, Y_test)
+#polarity_graphs(Y_train, Y_test)
 
 model = LogisticRegression()
 model.fit(X_train, Y_train) #creates a logistic regression model based on X_train and Y_train
-
 
 weight = model.coef_
 print(f"Weight: {weight}")
@@ -168,4 +165,3 @@ plt.close()
 PrecisionRecallDisplay.from_estimator(model, X_test, Y_test)
 plt.show()
 plt.close()
-
