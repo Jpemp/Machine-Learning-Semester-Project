@@ -7,7 +7,7 @@ from sklearn import model_selection
 from sklearn import datasets
 from sklearn.feature_extraction.image import grid_to_graph
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import log_loss, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score, RocCurveDisplay, PrecisionRecallDisplay
+from sklearn.metrics import log_loss, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score, RocCurveDisplay, PrecisionRecallDisplay, r2_score
 from nltk.corpus import stopwords
 import nltk
 import string
@@ -50,7 +50,7 @@ def polarity_graphs(train_reviews, test_reviews):
     plt.close()
 
     plt.pie(test, labels=test.index, autopct='%1.1f%%')
-    plt.title("Distribution of Sentiment of Train Dataset")
+    plt.title("Distribution of Sentiment of Test Dataset")
     plt.show()
     plt.close()
 
@@ -149,6 +149,8 @@ recall = recall_score(Y_test, y_pred, average='weighted')
 print(f"Recall: {recall}")
 f1 = f1_score(Y_test, y_pred, average='weighted')
 print(f"F1 Score: {f1}")
+r2 = r2_score(Y_test, y_pred)
+print(f"R2 Score: {r2}")
 
 #confusion matrix which shows false predictions and true predictions
 cmatrix = confusion_matrix(Y_test, y_pred)
