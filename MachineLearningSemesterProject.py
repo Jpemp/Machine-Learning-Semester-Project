@@ -129,7 +129,7 @@ print(f"Y_train size: {Y_train.shape}")
 print(f"X_test size: {X_test.shape}")
 print(f"Y_test size: {Y_test.shape}")
 
-#polarity_graphs(Y_train, Y_test)
+polarity_graphs(Y_train, Y_test)
 
 model = LogisticRegression()
 model.fit(X_train, Y_train) #creates a logistic regression model based on X_train and Y_train
